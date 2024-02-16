@@ -5,7 +5,9 @@ class EndPoint {
   static String checkEmail = "user/check-email";
   static String updateUser = "user/update";
   static String deleteUser = "user/delete?id=64a1fa760db6e1f0ad3c52e6";
-  static String getUserData = "user/get-user/64a1fc7dc5b2fe879468c637";
+  static String getUserDataEndPoint(id) {
+    return "user/get-user/$id";
+  }
   static String logOut = "user/logout";
 }
 
@@ -22,4 +24,5 @@ class ApiKeys {
   static String location = "location";
   static String profilePic = "profilePic";
   static String id = "id";
+  static String user = "user";
 }

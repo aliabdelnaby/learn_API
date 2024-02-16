@@ -16,18 +16,19 @@ class SignUpScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: BlocConsumer<UserCubit, UserState>(
-        listener: (context, state) 
-        {
-            if (state is SignUpSuccess) {
+        listener: (context, state) {
+          if (state is SignUpSuccess) {
             ScaffoldMessenger.of(context).showSnackBar(
-               SnackBar(
+              SnackBar(
                 content: Text(state.message),
+                backgroundColor: Colors.green,
               ),
             );
           } else if (state is SignUpFailure) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text(state.errMessage),
+                backgroundColor: Colors.red,
               ),
             );
           }

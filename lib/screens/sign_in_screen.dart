@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:happy_tech_mastering_api_with_flutter/cubit/user_cubit.dart';
 import 'package:happy_tech_mastering_api_with_flutter/cubit/user_state.dart';
+import 'package:happy_tech_mastering_api_with_flutter/screens/profile_screen.dart';
 import 'package:happy_tech_mastering_api_with_flutter/widgets/custom_form_button.dart';
 import 'package:happy_tech_mastering_api_with_flutter/widgets/custom_input_field.dart';
 import 'package:happy_tech_mastering_api_with_flutter/widgets/dont_have_an_account.dart';
@@ -22,18 +23,26 @@ class SignInScreen extends StatelessWidget {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
                 content: Text("Success Sign In"),
+                backgroundColor: Colors.green,
+              ),
+            );
+            context.read<UserCubit>().getUserProfile();
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const ProfileScreen(),
               ),
             );
           } else if (state is SignInFailure) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text(state.errMessage),
+                backgroundColor: Colors.red,
               ),
             );
           }
         },
         builder: (context, state) {
-          UserCubit cubit = BlocProvider.of<UserCubit>(context);
           return Scaffold(
             backgroundColor: const Color(0xffEEF1F3),
             body: Column(
@@ -79,13 +88,7 @@ class SignInScreen extends StatelessWidget {
                                 : CustomFormButton(
                                     innerText: 'Sign In',
                                     onPressed: () {
-                                      cubit.signIn();
-                                      // Navigator.push(
-                                      //   context,
-                                      //   MaterialPageRoute(
-                                      //     builder: (context) => const ProfileScreen(),
-                                      //   ),
-                                      // );
+                                      context.read<UserCubit>().signIn();
                                     },
                                   ),
                             const SizedBox(height: 18),
