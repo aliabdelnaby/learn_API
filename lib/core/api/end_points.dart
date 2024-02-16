@@ -1,7 +1,7 @@
 class EndPoint {
   static String baseUrl = "https://food-api-omega.vercel.app/api/v1/";
   static String signIn = "user/signin";
-  static String signUp = "user/user/signup";
+  static String signUp = "user/signup";
   static String checkEmail = "user/check-email";
   static String updateUser = "user/update";
   static String deleteUser = "user/delete?id=64a1fa760db6e1f0ad3c52e6";

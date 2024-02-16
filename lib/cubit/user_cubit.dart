@@ -4,8 +4,10 @@ import 'package:happy_tech_mastering_api_with_flutter/core/api/api_consumer.dart
 import 'package:happy_tech_mastering_api_with_flutter/core/api/end_points.dart';
 import 'package:happy_tech_mastering_api_with_flutter/core/cache/cache_helper.dart';
 import 'package:happy_tech_mastering_api_with_flutter/core/errors/exceptions.dart';
+import 'package:happy_tech_mastering_api_with_flutter/core/functions/upload_image_to_api.dart';
 import 'package:happy_tech_mastering_api_with_flutter/cubit/user_state.dart';
 import 'package:happy_tech_mastering_api_with_flutter/models/sign_in_model.dart';
+import 'package:happy_tech_mastering_api_with_flutter/models/sign_up_model.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 
@@ -32,8 +34,12 @@ class UserCubit extends Cubit<UserState> {
   TextEditingController signUpPassword = TextEditingController();
   //Sign up confirm password
   TextEditingController confirmPassword = TextEditingController();
-
   SignInModel? user;
+
+  uploadProfilePic(XFile image) {
+    profilePic = image;
+    emit(UploadProfilePic());
+  }
 
   signIn() async {
     try {
@@ -52,6 +58,31 @@ class UserCubit extends Cubit<UserState> {
       emit(SignInSuccess());
     } on ServerExceptions catch (e) {
       emit(SignInFailure(errMessage: e.errorModel.errorMessage));
+    }
+  }
+
+  signUp() async {
+    try {
+      emit(SignUpLoading());
+      final response = await api.post(
+        EndPoint.signUp,
+        isFormData: true,
+        data: {
+          ApiKeys.name: signUpName.text,
+          ApiKeys.phone: signUpPhoneNumber.text,
+          ApiKeys.email: signUpEmail.text,
+          ApiKeys.password: signUpPassword.text,
+          ApiKeys.confirmPassword: confirmPassword.text,
+          ApiKeys.location:
+              '{"name":"methalfa","address":"meet halfa","coordinates":[30.1572709,31.224779]}',
+          ApiKeys.profilePic: await uploadImageToAPI(profilePic!),
+        },
+      );
+      final signUpModel = SignUpModel.fromJson(response);
+
+      emit(SignUpSuccess(message: signUpModel.message));
+    } on ServerExceptions catch (e) {
+      emit(SignUpFailure(errMessage: e.errorModel.errorMessage));
     }
   }
 }
